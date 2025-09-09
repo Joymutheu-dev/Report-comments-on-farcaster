@@ -1,0 +1,17 @@
+// Simple keyword-based hate speech detection
+const hateSpeechKeywords = [
+  'hate', 'stupid', 'bitch', 'whore', // Add more relevant terms
+  // Include terms specific to sexism or gender-based harassment
+];
+
+const detectHateSpeech = (text) => {
+  const lowerText = text.toLowerCase();
+  for (const keyword of hateSpeechKeywords) {
+    if (lowerText.includes(keyword)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+module.exports = { detectHateSpeech };
