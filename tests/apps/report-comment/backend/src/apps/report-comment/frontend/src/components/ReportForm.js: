@@ -1,0 +1,63 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const ReportForm = ({ commentId }) => {
+  const [reason, setReason] = useState('');
+  const [description, setDescription] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!reason) {
+      setMessage('Please select a reason.');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const response = await axios.post('http://localhost:3001/report', {
+        commentId,
+        reason,
+        userId: 'anonymous', // Replace with Farcaster auth
+        description
+      });
+      setMessage(response.data.message);
+      setReason('');
+      setDescription('');
+    } catch (error) {
+      setMessage('Error submitting report.');
+    }
+    setIsSubmitting(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Reason for Report:</label>
+        <select value={reason} onChange={(e) => setReason(e.target.value)}>
+          <option value="">Select a reason</option>
+          <option value="Sexism">Sexism</option>
+          <option value="Hate Speech">Hate Speech</option>
+          <option value="Bullying">Bullying</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Details (optional):</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Describe why this comment is harmful"
+          rows="4"
+          cols="50"
+        />
+      </div>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Submit Report'}
+      </button>
+      {message && <p>{message}</p>}
+    </form>
+  );
+};
+
+export default ReportForm;
