@@ -1,0 +1,13 @@
+import React from 'react';
+import ReportForm from './components/ReportForm';
+
+const App = () => {
+  return (
+    <div>
+      <h1>Farcaster Report Comment</h1>
+      <ReportForm commentId="123" />
+    </div>
+  );
+};
+
+export default App;
